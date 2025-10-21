@@ -1,0 +1,231 @@
+/* ----- OUTER TABLE WRAPPER: for radius + shadow ----- */
+.table-wrapper {
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    background-color: var(--foreground-color);
+    width: 100%;
+    height: 60vh;
+    max-height: 60vh;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+}
+
+/* ----- INNER TABLE CONTAINER: handles horizontal scroll ----- */
+.tableContainer {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+    flex: 1;
+}
+
+.tableContainer::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.tableContainer::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+}
+
+.tableContainer::-webkit-scrollbar-track {
+    background-color: var(--table-row-color);
+    border-radius: 8px;
+}
+
+
+/* ----- TABLE STYLING ----- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-height: 100%;
+}
+
+thead {
+    font-size: var(--table-header-font-size);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    height: 40px;
+    background-color: var(--table-header-color);
+    color: var(--primary-text-color);
+    font-weight: bold;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody {
+    font-size: var(--table-body-font-size);
+    text-align: center;
+    color: var(--secondary-text-color);
+    vertical-align: middle;
+    background-color: var(--foreground-color);
+}
+
+tbody tr {
+    height: 40px;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.2s ease-in-out;
+}
+
+tbody tr:hover {
+    background-color: var(--table-row-color);
+}
+
+thead th,
+tbody td {
+    padding: 12.5px 15px;
+    text-overflow: ellipsis;
+}
+
+tbody .table-status {
+    white-space: nowrap;
+}
+
+tr:hover {
+  background-color: var(--table-row-hover-color) !important;
+  font-weight: normal !important;
+  color: var(--primary-text-color) !important;
+  transform: none !important;
+}
+
+/* --- Force the 2nd column (Source) to stay narrow --- */
+thead th:nth-child(2),
+tbody td:nth-child(2) {
+  width: 25ch !important;         /* ≈ 25 characters wide */
+  max-width: 600px !important;    /* hard cap */
+  white-space: nowrap !important; /* keep on one line          */
+  overflow: hidden !important;    /* hide overspill             */
+  text-overflow: ellipsis !important; /* add …                  */
+}
+
+/* Optional: long words break instead of pushing width */
+tbody td:nth-child(2) {
+  word-break: break-all !important;  /* comment out if not needed */
+}
+
+/* ---------- Action buttons in table ---------- */
+td.actionButtons {
+  padding: 0 !important;
+  display: table-cell !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  height: 100% !important;
+  gap: 5px !important;
+  background-color: transparent !important;
+}
+
+.actionButtonsContainer {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 5px !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.actionButtonsContainer button:disabled {
+  cursor: not-allowed !important;
+  background-color: var(--border-color) !important;
+}
+
+.actionButtonsContainer .releaseBtn,
+.actionButtonsContainer .payBtn,
+.actionButtonsContainer .viewBtn,
+.actionButtonsContainer .editBtn,
+.actionButtonsContainer .deleteBtn,
+.actionButtonsContainer .submitBtn,
+.actionButtonsContainer .approveBtn,
+.actionButtonsContainer .rejectBtn,
+.actionButtonsContainer .exportBtn,
+.actionButtonsContainer .auditBtn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: var(--table-action-button-border-radius) !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  transition: background-color 0.3s !important;
+  color: var(--foreground-color) !important;
+  outline: none !important;
+}
+
+/* View, Release, Pay buttons (Success/Green) */
+.releaseBtn,
+.viewBtn,
+.payBtn {
+  background-color: var(--success-color) !important;
+}
+.releaseBtn:hover,
+.viewBtn:hover,
+.payBtn:hover {
+  background-color: var(--success-hover-color) !important;
+}
+
+/* Edit button (Info/Blue) */
+.editBtn {
+  background-color: var(--info-color) !important;
+}
+.editBtn:hover {
+  background-color: var(--info-hover-color) !important;
+}
+
+/* Delete button (Error/Red) */
+.deleteBtn {
+  background-color: var(--error-color) !important;
+}
+.deleteBtn:hover {
+  background-color: var(--error-hover-color) !important;
+} 
+
+/* Submit button (Warning/Yellow) */
+.submitBtn {
+  background-color: var(--warning-color) !important;
+}
+.submitBtn:hover {
+  background-color: var(--warning-hover-color) !important;
+}
+
+/* Approve button (Success/Green) */
+.approveBtn {
+  background-color: var(--success-color) !important;
+}
+.approveBtn:hover {
+  background-color: var(--success-hover-color) !important;
+}
+
+/* Reject button (Error/Red) */
+.rejectBtn {
+  background-color: var(--error-color) !important;
+}
+.rejectBtn:hover {
+  background-color: var(--error-hover-color) !important;
+}
+
+/* Export button (Secondary/Orange) */
+.exportBtn {
+  background-color: var(--secondary-color) !important;
+}
+.exportBtn:hover {
+  background-color: var(--secondary-hover-color) !important;
+}
+
+/* Audit button (Info/Blue) */
+.auditBtn {
+  background-color: var(--info-color) !important;
+}
+.auditBtn:hover {
+  background-color: var(--info-hover-color) !important;
+}

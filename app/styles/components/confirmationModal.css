@@ -1,0 +1,142 @@
+.modalOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+  }
+
+.confirmationModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    min-width: 300px;
+    max-height: 80vh;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+    font-family: 'open-sans', sans-serif;
+    color: black;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  }
+
+  .confirmationModal::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+
+  .modalHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .modalButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 50%;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    }
+
+.cancelButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100px;
+    background-color: #961C1E;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.confirmButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    background-color: #13CE66;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+}
+
+/* ---------- Responsive Design ---------- */
+@media (max-width: 768px) {
+  .confirmationModal {
+    width: 95%;
+    min-width: 280px;
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .confirmationButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .confirmButton,
+  .cancelButton {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .confirmationHeader h2 {
+    font-size: 1.2em;
+  }
+
+  .confirmationMessage {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 480px) {
+  .confirmationModal {
+    width: 98%;
+    min-width: 260px;
+    padding: 12px;
+  }
+
+  .confirmationHeader h2 {
+    font-size: 1.1em;
+  }
+
+  .confirmationMessage {
+    font-size: 13px;
+  }
+}

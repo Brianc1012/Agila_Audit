@@ -1,0 +1,105 @@
+/* ----- CHIPS STYLING ----- */
+.chip {
+    /* width: 130px; */
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.chip.Paid,
+.chip.Released {
+    background-color: var(--success-chip-bg-color);
+    color: var(--success-chip-text-color);
+}
+
+.chip.Pending,
+.chip.out-of-stock,
+.chip.not-returned,
+.chip.decommissioned {
+    background-color: var(--error-chip-bg-color);
+    color: var(--error-chip-text-color);
+}
+
+.chip.Active {
+    background-color: var(--info-chip-bg-color);
+    color: var(--info-chip-text-color);
+}
+
+.chip.low-stock,
+.chip.pending {
+    background-color: var(--warning-chip-bg-color);
+    color: var(--warning-chip-text-color);
+}
+
+.chip.expired {
+    background-color: var(--expired-chip-bg-color);
+    color: var(--primary-text-color);
+}
+
+
+/* Budget Request Page Styles */
+/* ----- CHIPS STYLING ----- */
+.chip {
+    /* width: 130px; */
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.chip.Paid,
+.chip.Released {
+    background-color: var(--success-chip-bg-color);
+    color: var(--success-chip-text-color);
+}
+
+.chip.Pending,
+.chip.out-of-stock,
+.chip.not-returned,
+.chip.decommissioned {
+    background-color: var(--error-chip-bg-color);
+    color: var(--error-chip-text-color);
+}
+
+.chip.Active {
+    background-color: var(--info-chip-bg-color);
+    color: var(--info-chip-text-color);
+}
+
+.chip.low-stock,
+.chip.pending {
+    background-color: var(--warning-chip-bg-color);
+    color: var(--warning-chip-text-color);
+}
+
+.chip.expired {
+    background-color: var(--expired-chip-bg-color);
+    color: var(--primary-text-color);
+}
+
+/* Budget Request Status Chips - using unified chip styling */
+.chip.Draft {
+    background-color: var(--info-chip-bg-color);
+    color: var(--info-chip-text-color);
+}
+
+.chip.pending-approval {
+    background-color: var(--warning-chip-bg-color);
+    color: var(--warning-chip-text-color);
+}
+
+.chip.Approved {
+    background-color: var(--success-chip-bg-color);
+    color: var(--success-chip-text-color);
+}
+
+.chip.Rejected {
+    background-color: var(--error-chip-bg-color);
+    color: var(--error-chip-text-color);
+}
+
+.chip.Closed {
+    background-color: #F5F5F5;
+    color: #616161;
+}

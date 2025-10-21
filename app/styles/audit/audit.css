@@ -1,0 +1,388 @@
+/* ============================================================
+   audit.css – Audit Logs page
+   All styles reference tokens defined in global.css
+   ============================================================ */
+
+/* ---------- Base ---------- */
+.auditPage {
+  padding: 20px !important;
+  font-family: var(--font-sans) !important;
+  color: var(--primary-text-color) !important;
+}
+
+/* ---------- Settings / Filter Bar ---------- */
+.settings {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-bottom: 0px !important;
+  justify-content: space-between !important;
+}
+
+
+.settings select {
+  padding: 0 8px !important;
+  font-size: var(--page-button-font-size) !important;  
+  border: none !important;
+  border-radius: 4px !important;
+  background-color: var(--foreground-color) !important;
+  color: var(--primary-text-color) !important;
+  box-shadow: var(--box-shadow) !important;
+  transition: border-color 0.2s !important;
+  width: 125px !important;
+  height: var(--search-input-height) !important;
+}
+
+.settings .filters button {
+  font-size: var(--page-button-font-size) !important;
+  cursor: pointer !important;
+  border-radius: 5px !important;
+  border: none !important;
+  background-color: var(--secondary-color) !important;
+  color: var(--button-font-color) !important;
+  transition: background-color 0.2s !important;
+  box-shadow: var(--box-shadow) !important;
+  width: 125px !important;
+  height: var(--search-input-height) !important;
+}
+.settings .filters button:hover {
+  background-color: var(--secondary-hover-color) !important;
+}
+
+
+.searchBar {
+  display: flex !important;
+  flex-direction: row !important;
+  padding: var(--search-input-padding-right) !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: var(--search-input-width) !important;
+  height: var(--search-input-height) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--search-input-border-radius) !important;
+}
+
+.searchBar input[type="text"] {
+  flex: 1 !important;
+  padding-right: 0 8px !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: var(--search-bar-border-radius) !important;
+  font-size: 14px !important;
+  width: var(--search-input-width) !important;
+  height: var(--search-input-height) !important;
+}
+
+
+/* ---------- Filter Inputs ---------- */
+.filters {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+.filterDate {
+  margin-right: 1rem !important;
+}
+
+.dateFilter,
+#categoryFilter {
+  padding: 0 8px !important;
+  gap: var(--page-button-gap) !important;
+  font-size: var(--page-button-font-size) !important;
+  height: var(--page-button-height) !important;
+  width: var(--page-button-width) !important;
+  border-radius: var(--page-button-border-radius)!important;
+  box-shadow: var(--box-shadow) !important;
+}
+
+#categoryFilter {
+  max-width: max-content !important;
+}
+
+/* ---------- Import / Export ---------- */
+ #export{
+  height: var(--page-button-height) !important;
+  width: var(--page-button-width) !important;
+  font-size: var(--page-button-font-size) !important;
+  border-radius: var(--page-button-border-radius)!important;
+  cursor: pointer !important;
+  border: none !important;
+  background-color: var(--secondary-color) !important;
+  color: var(--button-font-color) !important;
+  transition: background-color 0.3s !important;
+}
+
+ #export:hover {
+  background-color: var(--secondary-hover-color)!important;
+}
+
+/* ---------- View Button (table) ---------- */
+.viewButton {
+  background-color: var(--info-color) !important;
+  color: var(--button-font-color) !important;
+  border: none !important;
+  padding: 6px 12px !important;
+  border-radius: var(--table-action-button-border-radius) !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+.viewButton:hover {
+  background-color: var(--info-hover-color) !important;
+}
+
+/* ---------- Export Button (separate action) ---------- */
+.exportButton {
+  color: var(--button-font-color) !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+  transition: background-color 0.2s !important;
+}
+
+/* ---------- View Details Modal ---------- */
+.modalOverlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 1000 !important;
+}
+
+.viewDetailsModal {
+  position: relative !important;
+  background: var(--foreground-color) !important;
+  padding: var(--modal-padding) !important;
+  border-radius: var(--modal-border-radius) !important;
+  width: 90% !important;
+  max-width: 600px !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
+  box-shadow: var(--box-shadow) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.modalHeader {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.modalHeader h2 {
+  margin: 0 !important;
+  font-size: var(--title-font-size) !important;
+  font-weight: var(--title-font-weight) !important;
+  color: var(--primary-text-color) !important;
+}
+
+.closeButton {
+  background: none !important;
+  border: none !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  color: var(--secondary-text-color) !important;
+}
+.closeButton:hover {
+  color: var(--primary-text-color) !important;
+}
+
+/* ---------- Modal Content ---------- */
+.modalContent {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 15px !important;
+}
+
+.detailRow {
+  display: flex !important;
+  gap: 10px !important;
+  padding: 8px 0 !important;
+}
+
+.detailRow strong {
+  min-width: 120px !important;
+  color: var(--secondary-text-color) !important;
+}
+
+.fullDetails {
+  white-space: pre-wrap !important;
+  color: var(--primary-text-color) !important;
+}
+
+/* ============================================================
+   OPTION 1: CARD-BASED LAYOUT WITH ICONS - AUDIT DETAILS MODAL
+   ============================================================ */
+
+.audit-details-container {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.audit-detail-card {
+  background: var(--foreground-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: var(--box-shadow);
+}
+
+.audit-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--table-header-color);
+}
+
+.audit-detail-row:last-child {
+  border-bottom: none;
+}
+
+.audit-detail-icon {
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.audit-detail-content {
+  flex: 1;
+}
+
+.audit-detail-label {
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.audit-detail-value {
+  color: var(--primary-text-color);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Action Badge Styles */
+.action-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.action-badge.create {
+  background: var(--success-chip-bg-color);
+  color: var(--success-chip-text-color);
+}
+
+.action-badge.update {
+  background: var(--info-chip-bg-color);
+  color: var(--info-chip-text-color);
+}
+
+.action-badge.delete {
+  background: var(--error-chip-bg-color);
+  color: var(--error-chip-text-color);
+}
+
+.action-badge.export {
+  background: var(--warning-chip-bg-color);
+  color: var(--warning-chip-text-color);
+}
+
+.action-badge.view {
+  background: var(--info-chip-bg-color);
+  color: var(--info-chip-text-color);
+}
+
+/* Code/Technical Data Styling */
+.code-text {
+  background: var(--table-header-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.875rem;
+  color: var(--primary-text-color);
+}
+
+/* Details Section Styling */
+.details-section {
+  margin-top: 1rem;
+}
+
+.details-section .audit-detail-value {
+  background: var(--modal-content-background-color);
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  border-left: 4px solid var(--primary-color);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .auditPage {
+    padding: 1rem !important;
+  }
+
+  .settings {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .filters input[type="date"],
+  .filters select {
+    width: 100% !important;
+  }
+
+  .importExport {
+    justify-content: space-between !important;
+  }
+
+  .viewDetailsModal {
+    width: 95% !important;
+    padding: 1rem !important;
+  }
+
+  .audit-details-container {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .audit-detail-row {
+    padding: 0.5rem 0;
+  }
+  
+  .audit-detail-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+  
+  .audit-detail-label {
+    font-size: 0.8rem;
+  }
+  
+  .audit-detail-value {
+    font-size: 0.9rem;
+  }
+}

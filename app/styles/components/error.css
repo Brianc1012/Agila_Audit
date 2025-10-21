@@ -1,0 +1,92 @@
+.errorDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: transparent;
+}
+
+.errorInner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card-bg, #fff6f6);
+  border: 1px solid var(--error-border, #ffd6d6);
+  color: var(--error-color, #8b0000);
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  animation: slideDown 280ms ease, subtlePulse 1400ms infinite 600ms;
+  min-width: 320px;
+  justify-content: space-between;
+}
+
+.errorIcon {
+  font-size: 22px;
+  margin-right: 8px;
+}
+
+.errorText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.errorTitle {
+  font-weight: 700;
+  color: var(--primary-text-color, #000);
+}
+
+.errorSubtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  color: var(--secondary-text-color, #404040);
+}
+
+.errorActions {
+  display: flex;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.errorActions .btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.errorActions .retry {
+  background: var(--info-color, #2D8EFF);
+  color: var(--button-font-color, #fff);
+}
+
+.errorActions .close {
+  background: transparent;
+  color: var(--error-color, #FF4949);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes subtlePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(45, 142, 255, 0.06);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(45, 142, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(45, 142, 255, 0);
+  }
+}

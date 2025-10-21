@@ -1,0 +1,85 @@
+.mainContainer{
+  display: flex;
+  flex-grow:2;
+  flex-direction: row; /* Stack children vertically */
+  align-items: stretch;
+  height: 100%; /* Full viewport height */
+  width: 100%; /* Full viewport width */
+  background-color: #fc0000;
+}
+.container {
+  height: 100%; /* Remaining space below the top bar */
+  flex-grow: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f4f4;
+  width: 100%; /* Ensure it fills the horizontal space */
+}
+
+.navBarContainer {
+  position: 200 !important;
+  flex-shrink: 0;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  height: 100%; /* Ensure it fills the full height */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  width: calc(100% * 8 / 34); 
+}
+
+.mainContent {
+  flex-grow: 1; /* Take the remaining width */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure it fills the full height */
+}
+
+.topBarContainer {
+  height: calc(100vh * 3 / 21);
+  width: 100%;
+  background-color: #FBFBFB;
+  color: black;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the inner content horizontally */
+  box-shadow:none;
+}
+
+
+.pageContainer {
+  height: 100%; /* Remaining space below the top bar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f4f4;
+  width: 100%; /* Ensure it fills the horizontal space */
+}
+
+.contentContainer {
+  width: calc(100% * 24 / 26);
+  height: calc(100% * 18 / 21);
+  background-color: #FFFFFF;
+  border: 2px solid rgba(21, 21, 27, 0.781);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 16px;
+  position: relative;
+  overflow-y: scroll; /* still scrollable */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.modalOverlay::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.topBarContainer h1,
+.contentContainer h1 {
+  margin: 0;
+}

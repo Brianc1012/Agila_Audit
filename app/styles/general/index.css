@@ -1,0 +1,142 @@
+/* ----- LAYOUT WRAPPER ----- */
+.app-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    transition: all 0.3s ease;
+
+}
+
+.layout-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.content {
+    flex: 1;
+    padding: 16px;
+    background-color: var(--background-color);
+    overflow-y: auto;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.card {
+  width: calc(100% * 26 / 26);
+  height: calc(100% * 21 / 21);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center !important;
+  align-content: center;
+  background-color: var(--foreground-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  padding: 25px;
+  overflow-y: auto;
+
+  /* Hide scrollbar (cross-browser) */
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE and Edge */
+}
+
+.card::-webkit-scrollbar {
+  display: none;                   /* Chrome, Safari, Opera */
+}
+
+.card .title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom:20px;
+}
+
+.card .elements {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card .entries {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+/* ...existing CSS... */
+.microservice-container {
+  width: 100% !important;
+  height: 100vh !important; /* Use full viewport height */
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: var(--background-color) !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important; /* Center the content */
+  align-items: center !important; /* Center horizontally */
+  position: fixed !important; /* Take full screen */
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 9999 !important;
+}
+
+.microservice-container .content {
+  align-items: center !important; /* Center within content */
+  justify-content: center !important; /* Center within content */
+  padding: 0 !important;
+  background-color: var(--background-color) !important;
+  width: 100% !important;
+  height: 100% !important; /* Take full height of container */
+  overflow-y: auto !important;
+  display: flex !important;
+}
+
+.microservice-container .card {
+  width: calc(96.5% * 26 / 26);
+  height: calc(95% * 21 / 21);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center !important;
+  align-content: center;
+  background-color: var(--foreground-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  padding: 25px;
+  overflow-y: auto;
+
+  /* Hide scrollbar (cross-browser) */
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE and Edge */
+  justify-content: center !important; /* Center card content */
+  align-items: center !important; /* Center card content */
+  position: static !important;
+}
+
+.microservice-container .card .elements {
+  height: 100% !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important; /* Start from top within the card */
+  align-items: stretch !important;
+}
+
+.microservice-container .card .title {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left !important;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom:20px;
+}
