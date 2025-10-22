@@ -1,0 +1,22 @@
+# ═══════════════════════════════════════════════════════════
+# 🔗 AUDIT LOGS MICROSERVICE INTEGRATION
+# ═══════════════════════════════════════════════════════════
+
+# Audit Logs Backend API URL
+AUDIT_LOGS_API_URL=http://localhost:4004
+
+# Your Department's API Key (for creating audit logs)
+AUDIT_API_KEY=FINANCE_DEFAULT_KEY
+
+# Optional: Audit Logs Frontend URL (if you want to link to it)
+AUDIT_LOGS_UI_URL=http://localhost:4003/audit
+
+# ═══════════════════════════════════════════════════════════
+# 🔐 JWT AUTHENTICATION (If you issue your own tokens)
+# ═══════════════════════════════════════════════════════════
+
+# Must match Audit Logs Microservice JWT_SECRET
+JWT_SECRET=
+
+# Or integrate with HR Auth Microservice that provides tokens
+HR_AUTH_API_URL=http://localhost:YOUR_HR_AUTH_PORT
