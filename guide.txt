@@ -9,3 +9,10 @@ pnpm backend:dev
 frontend:
 npm install
 npm run dev
+
+
+For SAVING Actions:
+POST http://localhost:4004/api/audit-logs
+
+For VIEWING Actions:
+GET http://localhost:4004/api/audit-logs
