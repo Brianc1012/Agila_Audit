@@ -11,7 +11,7 @@ npm install
 npm run dev
 
 
-For SAVING Actions:
+For SAVING Actions (src\routes\auditLogs.routes.ts):
 POST http://localhost:4004/api/audit-logs
 
 For VIEWING Actions:

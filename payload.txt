@@ -1,0 +1,35 @@
+POST
+
+| Field             | Type   | Required | Notes                                            |      |             |               |
+| ----------------- | ------ | -------- | ------------------------------------------------ | ---- | ----------- | ------------- |
+| `sourceService`   | string | ✅        | `"finance"                                       | "hr" | "inventory" | "operations"` |
+| `moduleName`      | string | ✅        | Name of the module, e.g., `"Payroll Management"` |      |             |               |
+| `recordId`        | string | Optional | The ID of the record being acted upon            |      |             |               |
+| `recordCode`      | string | Optional | Code of the record, e.g., `"REV-20251022-001"`   |      |             |               |
+| `action`          | string | ✅        | Action performed, e.g., `"APPROVE_PAYROLL"`      |      |             |               |
+| `performedBy`     | string | ✅        | User ID                                          |      |             |               |
+| `performedByName` | string | Optional | Human-readable name                              |      |             |               |
+| `performedByRole` | string | Optional | User role                                        |      |             |               |
+| `ipAddress`       | string | Optional | Request origin IP                                |      |             |               |
+| `userAgent`       | string | Optional | Client info or service name                      |      |             |               |
+| `requestMethod`   | string | Optional | HTTP method, e.g., `"POST"`                      |      |             |               |
+| `requestPath`     | string | Optional | API endpoint path                                |      |             |               |
+| `oldValues`       | string | Optional | JSON string of previous values                   |      |             |               |
+| `newValues`       | string | Optional | JSON string of new values                        |      |             |               |
+| `changedFields`   | string | Optional | JSON string array of changed fields              |      |             |               |
+| `reason`          | string | Optional | Why the action occurred                          |      |             |               |
+| `metadata`        | string | Optional | Any extra context                                |      |             |               |
+
+
+GET:
+| Query Param     | Type   | Notes                        |
+| --------------- | ------ | ---------------------------- |
+| `sourceService` | string | Filter by department/service |
+| `moduleName`    | string | Filter by module name        |
+| `performedBy`   | string | Filter by user ID            |
+| `action`        | string | Filter by action type        |
+| `recordId`      | string | Filter by record ID          |
+| `dateFrom`      | string | ISO date string, start range |
+| `dateTo`        | string | ISO date string, end range   |
+| `limit`         | number | Pagination limit             |
+| `offset`        | number | Pagination offset            |
