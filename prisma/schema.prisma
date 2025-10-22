@@ -1,0 +1,136 @@
+// ============================================================================
+// AUDIT LOGS MICROSERVICE - PRISMA SCHEMA
+// Repository 3: Centralized Audit Trail System
+// Receives logs from: Finance, HR, Inventory, Operations via REST API
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("AUDIT_LOGS_DATABASE_URL") // Separate database for audit logs
+}
+
+// ============================================================================
+// AUDIT LOG MODEL
+// ============================================================================
+model AuditLog {
+  id                Int        @id @default(autoincrement())
+  
+  // Source & Record Identification
+  sourceService     String     // "finance" | "hr" | "inventory" | "operations"
+  moduleName        String
+  recordId          String?
+  recordCode        String?
+
+  // Action Details
+  action            String
+
+  // User & Session Information
+  performedBy       String
+  performedByName   String?
+  performedByRole   String?
+  performedAt       DateTime   @default(now())
+
+  // Request Context
+  ipAddress         String?
+  userAgent         String?
+  requestMethod     String?
+  requestPath       String?
+
+  // Change Tracking
+  oldValues         String?    @db.Text
+  newValues         String?    @db.Text
+  changedFields     String?    @db.Text
+
+  // Additional Context
+  reason            String?
+  metadata          String?    @db.Text
+
+  // Performance & Debugging
+  processingTimeMs  Int?
+  errorMessage      String?    @db.Text
+
+  // Relationships
+  apiKeyId          Int?       // link to ApiKey that generated this log
+  apiKey            ApiKey?    @relation(fields: [apiKeyId], references: [id], onDelete: SetNull)
+
+  @@index([sourceService, moduleName, recordId])
+  @@index([sourceService, performedAt])
+  @@index([performedBy, performedAt])
+  @@index([action, performedAt])
+  @@index([moduleName, action, performedAt])
+  @@index([recordCode])
+  @@index([sourceService, moduleName, action])
+}
+
+// ============================================================================
+// AUDIT LOG SUMMARY (Aggregated Statistics for Dashboard)
+// ============================================================================
+model AuditLogSummary {
+  id                Int        @id @default(autoincrement())
+
+  date              DateTime   @db.Date
+  sourceService     String
+  moduleName        String
+  action            String
+
+  totalCount        Int        @default(0)
+  uniqueUsers       Int        @default(0)
+  avgProcessingTime Float?
+
+  lastAggregatedAt  DateTime   @default(now())
+
+  @@unique([date, sourceService, moduleName, action])
+  @@index([date, sourceService])
+  @@index([moduleName, date])
+}
+
+// ============================================================================
+// API KEY MANAGEMENT (Service-to-Service Authentication)
+// ============================================================================
+model ApiKey {
+  id                Int        @id @default(autoincrement())
+  keyHash           String     @unique
+  serviceName       String     // "finance" | "hr" | "inventory" | "operations"
+  description       String?
+
+  // Permissions
+  canWrite          Boolean    @default(true)
+  canRead           Boolean    @default(false)
+  allowedModules    String?    @db.Text
+
+  // Status & Lifecycle
+  isActive          Boolean    @default(true)
+  expiresAt         DateTime?
+  lastUsedAt        DateTime?
+
+  // Audit Trail
+  createdBy         String?
+  createdAt         DateTime   @default(now())
+  revokedBy         String?
+  revokedAt         DateTime?
+
+  // Relationships
+  auditLogs         AuditLog[]
+
+  @@index([serviceName, isActive])
+  @@index([expiresAt])
+}
+
+// ============================================================================
+// RATE LIMITING (Optional: Track API usage per service)
+// ============================================================================
+model RateLimit {
+  id                Int        @id @default(autoincrement())
+  serviceName       String
+  endpoint          String
+  requestCount      Int        @default(0)
+  windowStart       DateTime
+  windowEnd         DateTime
+
+  @@unique([serviceName, endpoint, windowStart])
+  @@index([windowEnd])
+}

@@ -3,16 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -p 3003",
-    "build": "next build",
-    "start": "next start -p 3003",
-    "lint": "next lint"
+    "dev": "cross-env NODE_ENV=development node -r dotenv-safe/config node_modules/next/dist/bin/next dev --turbopack",
+    "build": "cross-env NODE_ENV=production node -r dotenv-safe/config node_modules/next/dist/bin/next build",
+    "start": "cross-env NODE_ENV=production node -r dotenv-safe/config node_modules/next/dist/bin/next start",
+    "lint": "next lint",
+    "prisma:init": "npx prisma init --datasource-provider postgresql",
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "next": "15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sweetalert2": "^11.26.3"
+    "sweetalert2": "^11.26.3",
+    "@prisma/client": "^5.15.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -23,6 +26,9 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "cross-env": "^7.0.3",
+    "dotenv-safe": "^8.2.0",
+    "prisma": "^5.15.0"
   }
 }
