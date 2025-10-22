@@ -16,3 +16,8 @@ POST http://localhost:4004/api/audit-logs
 
 For VIEWING Actions:
 GET http://localhost:4004/api/audit-logs
+
+
+For UserRole Name condition:
+src\utils\validation.util.ts
+src\types\auditLog.d.ts
