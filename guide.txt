@@ -1,0 +1,11 @@
+
+backend:
+pnpm install
+pnpm prisma:generate
+pnpm prisma:migrate
+pnpm seed:apikeys
+pnpm backend:dev
+
+frontend:
+npm install
+npm run dev

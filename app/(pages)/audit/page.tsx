@@ -10,6 +10,9 @@ import { showSuccess, showError, showConfirmation } from '@app/utils/Alerts';
 import { formatDisplayText } from '@/app/utils/formatting';
 import FilterDropdown, { FilterSection } from "@app/Components/filter";
 
+// Backend API URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4004';
+
 type AuditLog = {
   log_id: string;
   action: string;
@@ -225,15 +228,30 @@ const AuditPage = () => {
     try {
       setError(null);
       setErrorCode(null);
-      const response = await fetch('/api/auditlogs');
+      const response = await fetch(`${API_BASE_URL}/api/audit-logs`);
       if (!response.ok) {
         setErrorCode(response.status);
         throw new Error(response.statusText || 'Failed to fetch audit logs');
       }
       const data = await response.json();
-      setAuditLogs(data);
+      
+      // Handle different response formats
+      // Backend might return { success: true, data: [...] } or just [...]
+      if (Array.isArray(data)) {
+        setAuditLogs(data);
+      } else if (data && Array.isArray(data.data)) {
+        setAuditLogs(data.data);
+      } else if (data && data.success === false) {
+        // Handle error response from backend
+        throw new Error(data.message || 'Failed to fetch audit logs');
+      } else {
+        // Unknown format, set empty array to prevent .filter() errors
+        console.warn('Unexpected response format:', data);
+        setAuditLogs([]);
+      }
     } catch (err: any) {
       console.error('Error fetching audit logs:', err);
+      setAuditLogs([]); // Always set to empty array on error to prevent .filter() errors
       if (err instanceof TypeError) {
         // network failure
         setErrorCode('network');
@@ -260,7 +278,8 @@ const AuditPage = () => {
     }
   };
 
-  const filteredLogs = auditLogs.filter((log) => {
+  // Safely filter logs (ensure auditLogs is always an array)
+  const filteredLogs = (Array.isArray(auditLogs) ? auditLogs : []).filter((log) => {
     const matchesSearch = 
       (log.details && typeof log.details === 'string' && log.details.toLowerCase().includes(search.toLowerCase())) ||
       (log.performed_by && typeof log.performed_by === 'string' && log.performed_by.toLowerCase().includes(search.toLowerCase())) ||
@@ -354,12 +373,12 @@ const AuditPage = () => {
       });
 
       // Get export ID
-      const exportIdResponse = await fetch('/api/generate-export-id');
+      const exportIdResponse = await fetch(`${API_BASE_URL}/api/generate-export-id`);
       if (!exportIdResponse.ok) throw new Error('Failed to generate export ID');
       const { exportId } = await exportIdResponse.json();
 
       // Create audit log for export action
-      await fetch('/api/auditlogs/export', {
+      await fetch(`${API_BASE_URL}/api/audit-logs/export`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

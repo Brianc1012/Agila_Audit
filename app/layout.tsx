@@ -9,7 +9,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <html lang="en">
       <head>
-        <title>Budget Request</title>
+        <title>Audit Logs</title>
         <link rel="icon" href="/agilaLogo.png" />
 
         {/* Include required CSS */}
