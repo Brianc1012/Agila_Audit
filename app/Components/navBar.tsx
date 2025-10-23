@@ -36,7 +36,7 @@ const Navbar: React.FC<NavbarProps> = ({
   return (
     <div className="navBar">
       
-      {/* ===== Logo Section ===== */}
+      {/* ===== Logo Section =====
       <div className="Logo">
         <div className="LogoImage">
           <Image 
@@ -47,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({
             className="logoImage"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* ===== Navigation Items ===== */}
       <div className="navContainer">

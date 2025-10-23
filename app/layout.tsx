@@ -10,7 +10,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
     <html lang="en">
       <head>
         <title>Audit Logs</title>
-        <link rel="icon" href="/agilaLogo.png" />
+        {/* <link rel="icon" href="/agilaLogo.png" /> */}
 
         {/* Include required CSS */}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"/>

@@ -10,6 +10,16 @@ frontend:
 npm install
 npm run dev
 
+Redis Cache (Optional):
+Install Redis on your system:
+- Windows: Download from https://github.com/microsoftarchive/redis/releases
+- Mac: brew install redis
+- Linux: sudo apt-get install redis-server
+
+Start Redis: redis-server
+Enable cache in .env: ENABLE_CACHE=true
+Cache is disabled by default (ENABLE_CACHE=false)
+
 
 For SAVING Actions (src\routes\auditLogs.routes.ts):
 POST http://localhost:4004/api/audit-logs

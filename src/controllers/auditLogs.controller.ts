@@ -21,6 +21,7 @@ import {
   getAuditLogStats,
   searchAuditLogs,
 } from '../services/auditLogs.service';
+import cache from '../utils/cache.util';
 
 /**
  * Create new audit log entry
@@ -58,6 +59,14 @@ export async function createAuditLogHandler(
     );
 
     const processingTime = Date.now() - startTime;
+
+    // Invalidate relevant caches after creating audit log
+    await cache.invalidateSummaries();
+    await cache.invalidateStats();
+    // Also invalidate service-specific cache if needed
+    if (req.serviceName) {
+      await cache.invalidateService(req.serviceName);
+    }
 
     sendSuccess(
       res,
@@ -157,6 +166,11 @@ export async function deleteAuditLogHandler(
     }
 
     await deleteAuditLog(id);
+
+    // Invalidate caches after deletion
+    await cache.invalidateSummaries();
+    await cache.invalidateStats();
+    await cache.invalidateAuditLogs();
 
     sendSuccess(res, 'Audit log deleted successfully');
   } catch (error: any) {

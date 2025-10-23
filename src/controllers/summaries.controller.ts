@@ -14,6 +14,7 @@ import {
   getRecentActivity,
   triggerManualAggregation,
 } from '../services/summaries.service';
+import cache from '../utils/cache.util';
 
 /**
  * Get audit log summaries with filters
@@ -38,7 +39,18 @@ export async function getSummariesHandler(
       groupBy: (req.query.groupBy as 'day' | 'week' | 'month') || 'day',
     };
 
-    const summaries = await getSummaries(filters, req.user, req.serviceName);
+    // Generate cache key with user role and filters
+    const cacheKey = cache.generateUserCacheKey('summaries', req.user!.id, req.user!.role, {
+      ...filters,
+      serviceName: req.serviceName,
+    });
+
+    // Try cache first, then fetch from DB if miss
+    const summaries = await cache.withCache(
+      cacheKey,
+      () => getSummaries(filters, req.user!, req.serviceName),
+      300 // 5 minutes TTL
+    );
 
     sendSuccess(res, 'Summaries retrieved successfully', summaries);
   } catch (error: any) {
@@ -61,7 +73,17 @@ export async function getSummaryStatsHandler(
       return;
     }
 
-    const stats = await getSummaryStats(req.user, req.serviceName);
+    // Generate cache key with user role
+    const cacheKey = cache.generateUserCacheKey('stats', req.user!.id, req.user!.role, {
+      serviceName: req.serviceName,
+    });
+
+    // Try cache first, then fetch from DB if miss
+    const stats = await cache.withCache(
+      cacheKey,
+      () => getSummaryStats(req.user!, req.serviceName),
+      180 // 3 minutes TTL
+    );
 
     sendSuccess(res, 'Summary statistics retrieved successfully', stats);
   } catch (error: any) {
@@ -86,7 +108,18 @@ export async function getRecentActivityHandler(
 
     const days = parseInt(req.query.days as string) || 7;
 
-    const activity = await getRecentActivity(days, req.user, req.serviceName);
+    // Generate cache key with user role and days parameter
+    const cacheKey = cache.generateUserCacheKey('recent', req.user!.id, req.user!.role, {
+      days,
+      serviceName: req.serviceName,
+    });
+
+    // Try cache first, then fetch from DB if miss
+    const activity = await cache.withCache(
+      cacheKey,
+      () => getRecentActivity(days, req.user!, req.serviceName),
+      120 // 2 minutes TTL
+    );
 
     sendSuccess(res, 'Recent activity retrieved successfully', activity);
   } catch (error: any) {
@@ -115,6 +148,10 @@ export async function triggerAggregationHandler(
       new Date(dateFrom),
       new Date(dateTo)
     );
+
+    // Invalidate all summaries cache after manual aggregation
+    await cache.invalidateSummaries();
+    await cache.invalidateStats();
 
     sendSuccess(
       res,
