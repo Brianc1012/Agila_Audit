@@ -22,6 +22,7 @@ import {
   searchAuditLogs,
 } from '../services/auditLogs.service';
 import cache from '../utils/cache.util';
+import dedupService from '../services/dedup.service';
 
 /**
  * Create new audit log entry
@@ -44,11 +45,29 @@ export async function createAuditLogHandler(
       return;
     }
 
+    // Check for duplicate event (idempotency)
+    const eventId = req.body.eventId || req.headers['idempotency-key'] as string;
+    if (eventId) {
+      const isDuplicate = await dedupService.isDuplicate(eventId, req.serviceName);
+      if (isDuplicate) {
+        // Return 202 Accepted for duplicate (idempotent response)
+        sendSuccess(
+          res,
+          'Event already processed (idempotent)',
+          { eventId, duplicate: true },
+          undefined,
+          202
+        );
+        return;
+      }
+    }
+
     const startTime = Date.now();
 
     const auditLog = await createAuditLog(
       {
         ...req.body,
+        eventId,
         ipAddress: req.body.ipAddress || req.ip,
         userAgent: req.body.userAgent || req.get('user-agent'),
         requestMethod: req.method,
@@ -59,6 +78,11 @@ export async function createAuditLogHandler(
     );
 
     const processingTime = Date.now() - startTime;
+
+    // Mark event as processed for idempotency
+    if (eventId) {
+      await dedupService.markAsProcessed(eventId, req.serviceName);
+    }
 
     // Invalidate relevant caches after creating audit log
     await cache.invalidateSummaries();
@@ -73,10 +97,11 @@ export async function createAuditLogHandler(
       'Audit log created successfully',
       {
         id: auditLog.id,
+        eventId: eventId || auditLog.id.toString(),
         processingTimeMs: processingTime,
       },
       undefined,
-      201
+      202 // Use 202 Accepted for async audit processing
     );
   } catch (error: any) {
     console.error('Create audit log error:', error);
@@ -170,7 +195,6 @@ export async function deleteAuditLogHandler(
     // Invalidate caches after deletion
     await cache.invalidateSummaries();
     await cache.invalidateStats();
-    await cache.invalidateAuditLogs();
 
     sendSuccess(res, 'Audit log deleted successfully');
   } catch (error: any) {

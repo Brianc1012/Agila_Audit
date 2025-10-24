@@ -18,8 +18,11 @@ datasource db {
 model AuditLog {
   id                Int        @id @default(autoincrement())
   
+  // Idempotency & Event Tracking
+  eventId           String?    @unique  // For deduplication
+  
   // Source & Record Identification
-  sourceService     String     // "finance" | "hr" | "inventory" | "operations"
+  sourceService     String     // "finance" | "hr" | "inventory" | "operations" | "budget"
   moduleName        String
   recordId          String?
   recordCode        String?
@@ -63,6 +66,21 @@ model AuditLog {
   @@index([moduleName, action, performedAt])
   @@index([recordCode])
   @@index([sourceService, moduleName, action])
+  @@index([eventId])
+}
+
+// ============================================================================
+// EVENT DEDUPLICATION (Idempotency Tracking)
+// ============================================================================
+model EventDedup {
+  id                Int        @id @default(autoincrement())
+  eventId           String     @unique
+  sourceService     String
+  processedAt       DateTime   @default(now())
+  expiresAt         DateTime?  // TTL for cleanup
+
+  @@index([expiresAt])
+  @@index([sourceService, processedAt])
 }
 
 // ============================================================================
