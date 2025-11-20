@@ -10,7 +10,9 @@ import { errorHandler, notFoundHandler } from './middlewares/errorHandler.middle
 import { apiRateLimiter } from './middlewares/rateLimit.middleware';
 
 // Import routes
-import auditLogsRoutes from './routes/auditLogs.routes';
+import superAdminRoutes from './routes/super_admin.routes';
+import departmentAdminRoutes from './routes/department_admin.routes';
+import userRoutes from './routes/user.routes';
 import summariesRoutes from './routes/summaries.routes';
 import apiKeysRoutes from './routes/apiKeys.routes';
 
@@ -65,7 +67,12 @@ app.get('/health', (req, res) => {
 // API ROUTES
 // ============================================================================
 
-app.use('/api/audit-logs', auditLogsRoutes);
+// Role-based audit log routes
+app.use('/api/super-admin', superAdminRoutes);
+app.use('/api/department-admin', departmentAdminRoutes);
+app.use('/api/user', userRoutes);
+
+// Other routes
 app.use('/api/summaries', summariesRoutes);
 app.use('/api/keys', apiKeysRoutes);
 

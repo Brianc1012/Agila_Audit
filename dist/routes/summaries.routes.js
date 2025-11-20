@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const roleAccess_middleware_1 = require("../middlewares/roleAccess.middleware");
+const errorHandler_middleware_1 = require("../middlewares/errorHandler.middleware");
+const rateLimit_middleware_1 = require("../middlewares/rateLimit.middleware");
+const summaries_controller_1 = require("../controllers/summaries.controller");
+const router = (0, express_1.Router)();
+router.get('/', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireDepartmentAdmin, (0, errorHandler_middleware_1.asyncHandler)(summaries_controller_1.getSummariesHandler));
+router.get('/stats', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireDepartmentAdmin, (0, errorHandler_middleware_1.asyncHandler)(summaries_controller_1.getSummaryStatsHandler));
+router.get('/recent', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.enforceRoleAccess, (0, errorHandler_middleware_1.asyncHandler)(summaries_controller_1.getRecentActivityHandler));
+router.post('/aggregate', rateLimit_middleware_1.writeRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireSuperAdmin, (0, errorHandler_middleware_1.asyncHandler)(summaries_controller_1.triggerAggregationHandler));
+exports.default = router;

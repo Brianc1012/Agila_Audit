@@ -1,153 +1,58 @@
-// AUDIT LOGS MICROSERVICE - PRISMA SCHEMA
-// Repository 3: Centralized Audit Trail System
-// Receives logs from: Finance, HR, Inventory, Operations via REST API
+// FINANCE AUDIT LOGS MICROSERVICE SCHEMA
 // ============================================================================
 
 generator client {
-  provider = "prisma-client-js"
+provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("AUDIT_LOGS_DATABASE_URL") // Separate database for audit logs
+provider = "postgresql"
+url      = env("AUDIT_LOGS_DATABASE_URL")
 }
 
 // ============================================================================
-// AUDIT LOG MODEL
+// ACTION TYPES REFERENCE TABLE
 // ============================================================================
-model AuditLog {
-  id                Int        @id @default(autoincrement())
-  
-  // Idempotency & Event Tracking
-  eventId           String?    @unique  // For deduplication
-  
-  // Source & Record Identification
-  sourceService     String     // "finance" | "hr" | "inventory" | "operations" | "budget"
-  moduleName        String
-  recordId          String?
-  recordCode        String?
 
-  // Action Details
-  action            String
+model action_type {
+id          Int        @id @default(autoincrement())
+code        String     @unique   // e.g., CREATE, UPDATE, DELETE, APPROVE, REJECT
+description String?
+is_active   Boolean    @default(true)
+created_at  DateTime   @default(now())
+updated_at  DateTime   @updatedAt
 
-  // User & Session Information
-  performedBy       String
-  performedByName   String?
-  performedByRole   String?
-  performedAt       DateTime   @default(now())
-
-  // Request Context
-  ipAddress         String?
-  userAgent         String?
-  requestMethod     String?
-  requestPath       String?
-
-  // Change Tracking
-  oldValues         String?    @db.Text
-  newValues         String?    @db.Text
-  changedFields     String?    @db.Text
-
-  // Additional Context
-  reason            String?
-  metadata          String?    @db.Text
-
-  // Performance & Debugging
-  processingTimeMs  Int?
-  errorMessage      String?    @db.Text
-
-  // Relationships
-  apiKeyId          Int?       // link to ApiKey that generated this log
-  apiKey            ApiKey?    @relation(fields: [apiKeyId], references: [id], onDelete: SetNull)
-
-  @@index([sourceService, moduleName, recordId])
-  @@index([sourceService, performedAt])
-  @@index([performedBy, performedAt])
-  @@index([action, performedAt])
-  @@index([moduleName, action, performedAt])
-  @@index([recordCode])
-  @@index([sourceService, moduleName, action])
-  @@index([eventId])
+audit_logs  audit_log[]
 }
 
 // ============================================================================
-// EVENT DEDUPLICATION (Idempotency Tracking)
+// AUDIT LOGS
 // ============================================================================
-model EventDedup {
-  id                Int        @id @default(autoincrement())
-  eventId           String     @unique
-  sourceService     String
-  processedAt       DateTime   @default(now())
-  expiresAt         DateTime?  // TTL for cleanup
 
-  @@index([expiresAt])
-  @@index([sourceService, processedAt])
+model audit_log {
+id              Int       @id @default(autoincrement())
+entity_type     String
+entity_id       String
+action_type_id  Int       // FK → action_type
+action_by       String?
+action_at       DateTime  @default(now())
+previous_data   Json?     // store only fields that changed
+new_data        Json?     // store only fields that changed
+version         Int       @default(1) // versioning for the same entity changes
+
+// versioning to be strictly sequential per entity
+@@unique([entity_type, entity_id, version])
+
+created_at      DateTime  @default(now())
+
+// Relations
+action_type     action_type @relation(fields: [action_type_id], references: [id])
+
+@@index([entity_type, entity_id])
+@@index([action_type_id])
+@@index([action_by])
+@@index([entity_type, action_type_id, action_at])
+@@index([action_at])
 }
 
-// ============================================================================
-// AUDIT LOG SUMMARY (Aggregated Statistics for Dashboard)
-// ============================================================================
-model AuditLogSummary {
-  id                Int        @id @default(autoincrement())
-
-  date              DateTime   @db.Date
-  sourceService     String
-  moduleName        String
-  action            String
-
-  totalCount        Int        @default(0)
-  uniqueUsers       Int        @default(0)
-  avgProcessingTime Float?
-
-  lastAggregatedAt  DateTime   @default(now())
-
-  @@unique([date, sourceService, moduleName, action])
-  @@index([date, sourceService])
-  @@index([moduleName, date])
-}
-
-// ============================================================================
-// API KEY MANAGEMENT (Service-to-Service Authentication)
-// ============================================================================
-model ApiKey {
-  id                Int        @id @default(autoincrement())
-  keyHash           String     @unique
-  serviceName       String     // "finance" | "hr" | "inventory" | "operations"
-  description       String?
-
-  // Permissions
-  canWrite          Boolean    @default(true)
-  canRead           Boolean    @default(false)
-  allowedModules    String?    @db.Text
-
-  // Status & Lifecycle
-  isActive          Boolean    @default(true)
-  expiresAt         DateTime?
-  lastUsedAt        DateTime?
-
-  // Audit Trail
-  createdBy         String?
-  createdAt         DateTime   @default(now())
-  revokedBy         String?
-  revokedAt         DateTime?
-
-  // Relationships
-  auditLogs         AuditLog[]
-
-  @@index([serviceName, isActive])
-  @@index([expiresAt])
-}
-
-// ============================================================================
-// RATE LIMITING (Optional: Track API usage per service)
-// ============================================================================
-model RateLimit {
-  id                Int        @id @default(autoincrement())
-  serviceName       String
-  endpoint          String
-  requestCount      Int        @default(0)
-  windowStart       DateTime
-  windowEnd         DateTime
-
-  @@unique([serviceName, endpoint, windowStart])
-  @@index([windowEnd])
-}
+// END OF FINANCE AUDIT LOGS MICROSERVICE SCHEMA

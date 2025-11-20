@@ -31,39 +31,45 @@ export interface AuthenticatedRequest extends Request {
 }
 
 // ============================================================================
-// AUDIT LOG TYPES
+// AUDIT LOG TYPES (Updated for new schema)
 // ============================================================================
 export interface CreateAuditLogDTO {
-  moduleName: string;
-  recordId?: string;
-  recordCode?: string;
-  action: string;
-  performedBy: string;
-  performedByName?: string;
-  performedByRole?: string;
-  ipAddress?: string;
-  userAgent?: string;
-  requestMethod?: string;
-  requestPath?: string;
-  oldValues?: string | object;
-  newValues?: string | object;
-  changedFields?: string | object;
-  reason?: string;
-  metadata?: string | object;
-  processingTimeMs?: number;
+  entity_type: string;        // e.g., "purchase_request", "budget", "user"
+  entity_id: string;          // ID of the entity being logged
+  action_type_code: string;   // Code from action_type table (CREATE, UPDATE, DELETE, etc.)
+  action_by?: string;         // User ID who performed the action
+  previous_data?: object;     // Previous state (only changed fields)
+  new_data?: object;          // New state (only changed fields)
 }
 
 export interface AuditLogFilters {
-  userId?: string;
-  service?: string;
-  moduleName?: string;
-  action?: string;
+  entity_type?: string;
+  entity_id?: string;
+  action_type_code?: string;
+  action_by?: string;
   dateFrom?: string;
   dateTo?: string;
   page?: number;
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
+}
+
+export interface AuditLogResponse {
+  id: number;
+  entity_type: string;
+  entity_id: string;
+  action_type: {
+    id: number;
+    code: string;
+    description: string | null;
+  };
+  action_by: string | null;
+  action_at: Date;
+  previous_data: any;
+  new_data: any;
+  version: number;
+  created_at: Date;
 }
 
 // ============================================================================

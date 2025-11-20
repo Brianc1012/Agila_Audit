@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const roleAccess_middleware_1 = require("../middlewares/roleAccess.middleware");
+const errorHandler_middleware_1 = require("../middlewares/errorHandler.middleware");
+const rateLimit_middleware_1 = require("../middlewares/rateLimit.middleware");
+const apiKeys_controller_1 = require("../controllers/apiKeys.controller");
+const router = (0, express_1.Router)();
+router.get('/', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireSuperAdmin, (0, errorHandler_middleware_1.asyncHandler)(apiKeys_controller_1.listApiKeysHandler));
+router.get('/:id', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireSuperAdmin, (0, errorHandler_middleware_1.asyncHandler)(apiKeys_controller_1.getApiKeyByIdHandler));
+router.post('/', rateLimit_middleware_1.writeRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireSuperAdmin, (0, errorHandler_middleware_1.asyncHandler)(apiKeys_controller_1.createApiKeyHandler));
+router.post('/validate', rateLimit_middleware_1.readRateLimiter, (0, errorHandler_middleware_1.asyncHandler)(apiKeys_controller_1.validateApiKeyHandler));
+router.patch('/:id/revoke', rateLimit_middleware_1.writeRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireSuperAdmin, (0, errorHandler_middleware_1.asyncHandler)(apiKeys_controller_1.revokeApiKeyHandler));
+router.delete('/:id', rateLimit_middleware_1.writeRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireSuperAdmin, (0, errorHandler_middleware_1.asyncHandler)(apiKeys_controller_1.deleteApiKeyHandler));
+exports.default = router;

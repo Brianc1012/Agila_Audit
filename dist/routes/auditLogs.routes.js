@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const apiKey_middleware_1 = require("../middlewares/apiKey.middleware");
+const roleAccess_middleware_1 = require("../middlewares/roleAccess.middleware");
+const errorHandler_middleware_1 = require("../middlewares/errorHandler.middleware");
+const rateLimit_middleware_1 = require("../middlewares/rateLimit.middleware");
+const auditLogs_controller_1 = require("../controllers/auditLogs.controller");
+const router = (0, express_1.Router)();
+router.post('/', rateLimit_middleware_1.writeRateLimiter, apiKey_middleware_1.requireWritePermission, (0, errorHandler_middleware_1.asyncHandler)(auditLogs_controller_1.createAuditLogHandler));
+router.get('/', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.enforceRoleAccess, (0, errorHandler_middleware_1.asyncHandler)(auditLogs_controller_1.getAuditLogsHandler));
+router.get('/stats', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.enforceRoleAccess, (0, errorHandler_middleware_1.asyncHandler)(auditLogs_controller_1.getAuditLogStatsHandler));
+router.get('/search', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.enforceRoleAccess, (0, errorHandler_middleware_1.asyncHandler)(auditLogs_controller_1.searchAuditLogsHandler));
+router.get('/:id', rateLimit_middleware_1.readRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.enforceRoleAccess, (0, errorHandler_middleware_1.asyncHandler)(auditLogs_controller_1.getAuditLogByIdHandler));
+router.delete('/:id', rateLimit_middleware_1.writeRateLimiter, auth_middleware_1.authenticateJWT, roleAccess_middleware_1.requireSuperAdmin, (0, errorHandler_middleware_1.asyncHandler)(auditLogs_controller_1.deleteAuditLogHandler));
+exports.default = router;

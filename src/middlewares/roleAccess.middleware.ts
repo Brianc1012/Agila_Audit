@@ -12,8 +12,8 @@ import {
 } from '../utils/validation.util';
 
 /**
- * Apply access filter based on user role and service context
- * This function returns Prisma where clause filters
+ * Apply access filter based on user role (deprecated - moved to service layer)
+ * This function is kept for backward compatibility
  */
 export function applyAccessFilter(
   user: { id: string; username: string; role: string },
@@ -24,36 +24,34 @@ export function applyAccessFilter(
     return {};
   }
 
-  // Department Admin - Can see all logs from their department
+  // Department Admin - Can see all logs from their department users
   if (isDepartmentAdmin(user.role)) {
     const department = extractDepartmentFromRole(user.role);
-    
-    if (department && serviceName) {
-      // Ensure admin can only access their own department
-      if (department !== serviceName) {
-        return { id: -1 }; // Return impossible condition to block access
-      }
+    const deptCodes: Record<string, string> = {
+      'finance': 'FIN',
+      'hr': 'HR',
+      'inventory': 'INV',
+      'operations': 'OPS',
+    };
+
+    const deptCode = deptCodes[department || ''];
+    if (deptCode) {
       return {
-        sourceService: serviceName,
-      };
-    }
-    
-    // If serviceName not provided, filter by role-based department
-    if (department) {
-      return {
-        sourceService: department,
+        action_by: {
+          startsWith: deptCode,
+        },
       };
     }
   }
 
   // Non-Admin - Can only see their own logs
   return {
-    performedBy: user.id,
+    action_by: user.id,
   };
 }
 
 /**
- * Middleware to enforce role-based access control
+ * Middleware to enforce role-based access control (simplified)
  */
 export function enforceRoleAccess(
   req: AuthenticatedRequest,
@@ -73,34 +71,8 @@ export function enforceRoleAccess(
       return;
     }
 
-    // SuperAdmin - Full access
-    if (isSuperAdmin(req.user.role)) {
-      next();
-      return;
-    }
-
-    // Department Admin - Check if accessing own department
-    if (isDepartmentAdmin(req.user.role)) {
-      const department = extractDepartmentFromRole(req.user.role);
-      
-      // If serviceName is set (from API key), verify it matches user's department
-      if (req.serviceName && department !== req.serviceName) {
-        sendForbidden(res, 'Cannot access other department logs');
-        return;
-      }
-
-      // If query params include service filter, verify it matches
-      if (req.query.service && department !== req.query.service) {
-        sendForbidden(res, 'Cannot access other department logs');
-        return;
-      }
-
-      next();
-      return;
-    }
-
-    // Non-Admin - Can only access own logs
-    // The actual filtering happens in the service layer using applyAccessFilter
+    // All authenticated users can access their respective endpoints
+    // Actual filtering happens in the service layer based on user role
     next();
   } catch (error: any) {
     console.error('Role access enforcement error:', error);

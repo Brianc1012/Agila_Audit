@@ -15,7 +15,8 @@
     "backend:dev": "ts-node-dev --respawn --transpile-only --project tsconfig.server.json src/index.ts",
     "backend:build": "tsc -p tsconfig.server.json",
     "backend:start": "node dist/index.js",
-    "seed:apikeys": "ts-node --project tsconfig.server.json src/scripts/seedApiKeys.ts"
+    "seed:apikeys": "ts-node --project tsconfig.server.json src/scripts/seedApiKeys.ts",
+    "seed:actions": "ts-node prisma/seedActionTypes.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.15.0",
